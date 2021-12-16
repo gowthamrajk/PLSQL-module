@@ -1,0 +1,1633 @@
+### Variables, Constant, Anchor Data types ### 
+
+set serveroutput on
+
+DECLARE 
+    name varchar2(15);
+BEGIN
+    name := 'gowthamraj';
+    DBMS_OUTPUT.PUT_LINE('my name is : '||name);
+END;
+/
+
+********************************************************
+
+DECLARE 
+    val constant number := 10;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('value : '||val);
+END;
+/
+
+*******************************************************
+
+DECLARE 
+    v_pi CONSTANT number(7,6) NOT NULL DEFAULT 3.141592;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(v_pi);
+END;
+/
+
+********************************************************
+
+set autoprint on;
+variable v_bind2 varchar2(10);
+exec :v_bind2 := 'Gowtham';
+
+********************************************************
+
+VARIABLE v_bind1 varchar2(10);
+EXEC :v_bind1 := 'gowthamraj';
+BEGIN
+    :v_bind1 := 'Gowtham';
+    DBMS_OUTPUT.PUT_LINE(:v_bind1);
+END;
+/
+
+********************************************************
+
+
+### Custom Prompt box to get user input
+
+ACCEPT age number PROMPT 'what is your age ?';
+
+*******************************************************
+
+
+### Conditional Statements ### 
+
+
+DECLARE
+    num number := 8;
+BEGIN
+    IF num<10 THEN
+     dbms_output.put_line('Inside If');
+    END IF;
+    dbms_output.put_line('outside If');
+END;
+/
+
+********************************************************
+
+DECLARE
+    num number := -8;
+BEGIN
+    IF num < 10 AND num > 0 THEN
+     dbms_output.put_line('Inside If');
+    END IF;
+    dbms_output.put_line('outside If');
+END;
+/
+
+********************************************************
+
+DECLARE
+    num number := &enter_value;
+BEGIN
+    IF MOD(num,2) = 0 THEN
+     dbms_output.put_line('Even Number');
+    ELSE
+     dbms_output.put_line('Odd Number');
+    END IF;
+END;
+/
+
+********************************************************
+
+DECLARE
+    num number := &enter_value;
+BEGIN
+    IF num > 0 THEN 
+     IF MOD(num,2) = 0 THEN
+      dbms_output.put_line('Even Number');
+     ELSE
+      dbms_output.put_line('Odd Number');
+     END IF;
+    ELSIF num = 0 THEN
+     dbms_output.put_line('Zero');
+    ELSE
+     dbms_output.put_line('Negative Number');
+    END IF;
+END;
+/
+
+********************************************************
+
+DECLARE
+    num number := &enter_value;
+BEGIN
+    IF num > 0 THEN
+     dbms_output.put_line('Positive Number');
+    ELSIF num < 0 THEN
+     dbms_output.put_line('Negative Number');
+    ELSE 
+     dbms_output.put_line('Zero Number');
+    END IF;
+END;
+/
+
+********************************************************
+
+DECLARE
+    grade char(1) := &enter_grade;
+    rank varchar2(30);
+BEGIN
+   CASE grade
+   WHEN 'A' THEN
+    rank := 'Excelent';
+   WHEN 'B' THEN
+    rank := 'Very Good';
+   WHEN 'C' THEN
+    rank := 'Good';
+   WHEN 'D' THEN
+    rank := 'Average';
+   WHEN 'E' THEN
+    rank := 'Poor';
+   ELSE 
+    rank := 'No Such Grade';
+   END CASE;
+   dbms_output.put_line('Grade is : '||rank);
+END;
+/
+
+********************************************************
+
+=> Searched Case : 
+
+DECLARE
+    units number := &enter_total_units;
+    total_charge number := 1000;
+BEGIN
+   CASE 
+   WHEN units > 0 AND units <= 5 THEN
+    total_charge := total_charge + (total_charge*0.05);
+   WHEN units > 5 AND units <= 10 THEN
+    total_charge := total_charge + (total_charge*0.10);
+   WHEN units > 10 AND units <= 30 THEN
+    total_charge := total_charge + (total_charge*0.25);
+   WHEN units > 30 AND units <= 50 THEN
+    total_charge := total_charge + (total_charge*0.50);
+   WHEN units > 50 THEN
+    total_charge := total_charge*2;
+   ELSE 
+    total_charge := total_charge ;
+   END CASE;
+   dbms_output.put_line('You have to pay Rs: '||total_charge );
+END;
+/
+
+********************************************************
+
+=> GOTO statement
+
+BEGIN
+   GOTO message2;
+   
+   <<message1>>
+   dbms_output.put_line('message 1 is displayed here...');
+   
+   <<message2>>
+   dbms_output.put_line('message 2 is displayed here...');
+END;
+/
+
+********************************************************
+
+=> NULL statement
+
+DECLARE
+    status boolean := true;
+BEGIN
+   IF status THEN
+     GOTO message;
+   END IF;
+   
+   <<message>>
+   dbms_output.put_line('message 1 is displayed here...');
+   NULL;
+END;
+/
+
+********************************************************
+
+
+
+### Looping Statements ### 
+
+
+DECLARE
+    counter number := 0;
+BEGIN
+   LOOP
+     counter := counter + 1;
+     dbms_output.put_line(counter);
+     IF counter >= 5 THEN
+       EXIT;
+     END IF;
+   END LOOP;
+END;
+/
+
+********************************************************
+
+DECLARE
+    counter number := 0;
+BEGIN
+   LOOP
+     counter := counter + 1;
+     dbms_output.put_line(counter);
+     EXIT WHEN counter >= 5;
+   END LOOP;
+END;
+/
+
+********************************************************
+
+DECLARE
+    row_counter number := 0;
+    col_counter number := 0;
+BEGIN
+   <<outer_loop>> LOOP
+     row_counter := row_counter + 1;
+     EXIT outer_loop WHEN row_counter > 2;
+     dbms_output.put_line('Outer Loop'||row_counter);
+     col_counter := 0;
+     <<inner_loop>> LOOP
+        col_counter := col_counter + 1;
+        EXIT inner_loop WHEN col_counter > 3;
+        dbms_output.put_line('Inner Loop'||col_counter);
+     END LOOP inner_loop;
+   END LOOP outer_loop;
+END;
+/
+
+********************************************************
+
+DECLARE
+    num number := &enter_value;
+    counter number := 1;
+    result number;
+BEGIN
+    WHILE counter <= 10 LOOP
+      result := num*counter;
+      dbms_output.put_line(counter||' * '||num||' = '||result);
+      counter := counter + 1;
+    END LOOP;
+END;
+/
+
+********************************************************
+
+DECLARE
+    num number := &enter_value;
+    counter number := 1;
+    flag boolean := true;
+    result number;
+BEGIN
+    WHILE flag LOOP
+      IF counter = 10 THEN
+       flag := false;
+      END IF;
+      result := num*counter;
+      dbms_output.put_line(counter||' * '||num||' = '||result);
+      counter := counter + 1;
+    END LOOP;
+END;
+/
+
+********************************************************
+
+BEGIN
+    FOR counter IN 1..10 LOOP
+      dbms_output.put_line(counter);
+    END LOOP;
+END;
+/
+
+********************************************************
+
+BEGIN
+    FOR counter IN REVERSE 1..10 LOOP
+      dbms_output.put_line(counter);
+    END LOOP;
+END;
+/
+
+********************************************************
+
+DECLARE
+    num number := &enter_value;
+    result number;
+BEGIN
+    FOR counter IN 1..10 LOOP
+      result := num*counter;
+      dbms_output.put_line(counter||' * '||num||' = '||result);
+    END LOOP;
+END;
+/
+
+********************************************************
+
+=> continue
+
+BEGIN
+   FOR counter IN 1..10 LOOP
+     IF MOD(counter,2) = 1 THEN
+      CONTINUE;
+     END IF;
+     dbms_output.put_line(counter);
+   END LOOP;
+END;
+/
+
+********************************************************
+
+BEGIN
+   FOR counter IN 1..10 LOOP
+     CONTINUE WHEN MOD(counter,2) = 1;
+     dbms_output.put_line(counter);
+   END LOOP;
+END;
+/
+
+********************************************************
+
+
+### Select INTO ###
+
+
+DECLARE 
+    sal employees.salary%TYPE;
+BEGIN
+    select salary into sal from employees where employee_id=101;
+    DBMS_OUTPUT.PUT_LINE('Salary is : '||sal);
+END;
+/
+
+********************************************************
+
+DECLARE 
+    name varchar2(15);
+    sal number(5);
+BEGIN
+    select concat(first_name,last_name), salary into name, sal from employees where employee_id=100;
+    DBMS_OUTPUT.PUT_LINE('The Employee with full name '||name||' has salary '||sal);
+END;
+/
+
+********************************************************
+
+
+### Record Data Types ### -> They are a datastructure which can hold data of different types. 
+
+=> Table Based Record Type
+
+DECLARE
+    emp_id number := &emter_emp_id;
+    employee1 employees%ROWTYPE;
+BEGIN
+   select * into employee1 from employees where employee_id = emp_id;
+   dbms_output.put_line('Name of employee with id '||emp_id||' : '||employee1.first_name);
+END;
+/
+
+********************************************************
+
+=> Cursor Based Record Type
+
+DECLARE
+    CURSOR cursor1 IS 
+    select * from employees where employee_id=100;
+    record1 cursor1%ROWTYPE;
+BEGIN
+   OPEN cursor1;
+   FETCH cursor1 INTO record1;
+   dbms_output.put_line('Name of employee with id '||record1.employee_id||' : '||record1.first_name);
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+DECLARE
+    CURSOR cursor1 IS 
+    select * from employees where employee_id in (100,101,102,103);
+    record1 cursor1%ROWTYPE;
+BEGIN
+   OPEN cursor1;
+   LOOP
+     FETCH cursor1 INTO record1;
+     EXIT WHEN cursor1%NOTFOUND;
+     dbms_output.put_line('Name of employee with id '||record1.employee_id||' : '||record1.first_name);
+   END LOOP;
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+=> User defined Record Type
+
+DECLARE
+    TYPE temp_record IS RECORD (
+      emp_id employees.employee_id%TYPE,
+      fname varchar2(30),
+      lname varchar2(30) 
+    );
+    record1 temp_record;
+BEGIN
+   select employee_id, first_name, last_name into record1 from employees where employee_id = 100;
+   dbms_output.put_line('Employee details are : '||record1.emp_id||' '||record1.fname||' '||record1.lname);
+END;
+/
+
+********************************************************
+
+=> Inserting in a Record Type
+
+DECLARE
+    employee1 employees%ROWTYPE;
+BEGIN
+   employee1.employee_id := 1001;
+   employee1.first_name := 'Gowtham';
+   employee1.last_name := 'Raj';
+   
+   INSERT INTO employees values employee1;
+   dbms_output.put_line('Inserted Employee details are : '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name);
+END;
+/
+
+********************************************************
+
+=> Updating in a Record Type (use SET ROW keyword)
+
+DECLARE
+    employee1 employees%ROWTYPE;
+BEGIN
+   select * into employee1 from employees where employee_id = 1001;
+   employee1.last_name := 'RajK';
+   
+   UPDATE employees SET ROW = employee1 where employee1.employee_id = employees.employee_id;
+   dbms_output.put_line('Updated Employee details are : '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name);
+END;
+/
+
+********************************************************
+
+=> Nested Records
+
+DECLARE
+    TYPE address IS RECORD(
+      door_no number,
+      street varchar2(20),
+      state varchar2(20),
+      country varchar2(20)
+    );
+    TYPE customer IS RECORD(
+      name varchar2(30),
+      shipping_address address
+    );
+    customer1 customer;
+BEGIN
+   customer1.name := 'gowthamraj';
+   customer1.shipping_address.door_no := 2;
+   customer1.shipping_address.street := 'abc';
+   customer1.shipping_address.state := 'TN';
+   customer1.shipping_address.country := 'INDIA';
+   dbms_output.put_line('Customer details : '||customer1.name||' '||customer1.shipping_address.door_no||' '||customer1.shipping_address.street||' '||customer1.shipping_address.state||' '||customer1.shipping_address.country);
+END;
+/
+
+********************************************************
+
+
+
+### Cursors ### -> used to collect multiple records, its like a pointer pointing to the context area of that particular DML query, 
+                   Types : -> implicit cursor, explicit cursor.
+
+DECLARE
+    name varchar2(30);
+    CURSOR cursor1 IS
+    select first_name from employees where employee_id = 100;
+BEGIN
+   OPEN cursor1;
+   FETCH cursor1 into name;
+   dbms_output.put_line('Employee Name : '||name);
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+DECLARE
+    name varchar2(30);
+    CURSOR cursor1 IS
+    select first_name from employees where employee_id IN (100,101,102,103);
+BEGIN
+   OPEN cursor1;
+   LOOP
+     FETCH cursor1 into name;
+     dbms_output.put_line('Employee Name : '||name);
+     EXIT WHEN cursor1%NOTFOUND;
+   END LOOP;
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+=> cursor with multiple values
+
+DECLARE
+    fname varchar2(30);
+    lname varchar2(30);
+    CURSOR cursor1 IS
+    select first_name, last_name from employees where employee_id = 101;
+BEGIN
+   OPEN cursor1;
+   FETCH cursor1 into fname,lname;
+   dbms_output.put_line('Employee Name : '||fname||' '||lname);
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+=> Cursor with Parameter
+
+DECLARE
+    name varchar2(30);
+    CURSOR cursor1(emp_id number) IS
+    select first_name from employees where employee_id = emp_id;
+BEGIN
+   OPEN cursor1(101);
+   FETCH cursor1 into name;
+   dbms_output.put_line('Employee Name : '||name);
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+DECLARE
+    name varchar2(30);
+    CURSOR cursor1(emp_id number) IS
+    select first_name from employees where employee_id = emp_id;
+BEGIN
+   OPEN cursor1(101);
+   FETCH cursor1 into name;
+   dbms_output.put_line('Employee Name : '||name);
+   CLOSE cursor1;
+   
+   OPEN cursor1(102);
+   FETCH cursor1 into name;
+   dbms_output.put_line('Employee Name : '||name);
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+=> cursor with default parameter value
+
+DECLARE
+    name varchar2(30);
+    CURSOR cursor1(emp_id number := 101) IS
+    select first_name from employees where employee_id = emp_id;
+BEGIN
+   OPEN cursor1;
+   FETCH cursor1 into name;
+   dbms_output.put_line('Employee Name : '||name);
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+=> Cursor For Loop
+
+DECLARE
+    CURSOR cursor1 IS
+    select * from employees where employee_id in (100,101,102,103);
+BEGIN
+   FOR employee IN cursor1 LOOP
+      dbms_output.put_line('Employee Details => '||employee.employee_id||' '||employee.first_name||' '||employee.last_name||' '||employee.salary);
+   END LOOP;
+END;
+/
+
+********************************************************
+
+=> Cursor Forloop with select statement (Anonymous Cursors)
+
+BEGIN
+   FOR employee IN (
+        select * from employees where employee_id in (100,101,102,103)
+   )
+   LOOP
+      dbms_output.put_line('Employee Details => '||employee.employee_id||' '||employee.first_name||' '||employee.last_name||' '||employee.salary);
+   END LOOP;
+END;
+/
+
+********************************************************
+
+=> Cursor with REF cursors (Strong typed)
+
+DECLARE
+    TYPE cursor1 IS REF CURSOR RETURN employees%ROWTYPE;
+    ref_cursor cursor1;
+    employee1 employees%Rowtype; 
+BEGIN
+   OPEN ref_cursor for select * from employees where employee_id in (100,101,102,103);
+   LOOP
+     FETCH ref_cursor into employee1;
+     EXIT WHEN ref_cursor%NOTFOUND;
+     dbms_output.put_line('Employee Name : '||employee1.first_name);
+   END LOOP;
+   CLOSE ref_cursor;
+END;
+/
+
+********************************************************
+
+=> Cursor with REF cursors (Weak typed)
+
+DECLARE
+    TYPE cursor1 IS REF CURSOR;
+    ref_cursor cursor1;
+    employee1 employees%Rowtype; 
+BEGIN
+   OPEN ref_cursor for select * from employees where employee_id in (100,101,102,103);
+   LOOP
+     FETCH ref_cursor into employee1;
+     EXIT WHEN ref_cursor%NOTFOUND;
+     dbms_output.put_line('Employee Name : '||employee1.first_name);
+   END LOOP;
+   CLOSE ref_cursor;
+END;
+/
+
+********************************************************
+
+=> updatable Cursor
+
+DECLARE
+    CURSOR cursor1 IS 
+    select employee_id, first_name, last_name from employees where employee_id in (100,101,102)
+    FOR UPDATE;
+    employee_id number;
+    first_name employees.first_name%TYPE;
+    last_name employees.last_name%TYPE;
+BEGIN
+   OPEN cursor1;
+   LOOP
+     FETCH cursor1 into employee_id, first_name, last_name;
+     EXIT WHEN cursor1%NOTFOUND;
+     dbms_output.put_line('Employee Details : '||' '||employee_id||' '||first_name||' '||last_name);
+   END LOOP;
+   CLOSE cursor1;
+END;
+/
+
+********************************************************
+
+### Procedures ### -> named subprograms which can be stored and executed later, contains IN, OUT, IN OUT parameters.
+
+
+=> Procedure with input parameter
+
+CREATE OR REPLACE PROCEDURE filterByEmployeeId(emp_id IN number) IS
+  employee1 employees%ROWTYPE;
+BEGIN
+  select * into employee1 from employees where employee_id = emp_id;
+  dbms_output.put_line('Employee '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name||' '||employee1.salary);
+END;
+/
+
+EXEC filterByEmployeeId(100);
+
+********************************************************
+
+CREATE OR REPLACE PROCEDURE filterByEmployeeId(emp_id IN number) IS
+  employee1 employees%ROWTYPE;
+BEGIN
+  select * into employee1 from employees where employee_id = emp_id;
+  dbms_output.put_line('Employee '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name||' '||employee1.salary);
+END;
+/
+
+EXEC filterByEmployeeId(&enter_employee_id);
+
+********************************************************
+
+=> using OUTPUT parameters in procedure
+
+CREATE OR REPLACE PROCEDURE getEmployeeSalaryById(emp_id IN number, sal OUT employees.salary%TYPE) IS
+BEGIN
+  select salary into sal from employees where employee_id = emp_id;
+  --dbms_output.put_line('Employee '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name||' '||employee1.salary);
+END;
+/
+
+DECLARE
+ sal employees.salary%TYPE;
+BEGIN
+ getEmployeeSalaryById(100,sal);
+ dbms_output.put_line('Employee Salary Rs: '||sal);
+END;
+/
+
+********************************************************
+
+=> calling procedure from another procedure
+
+CREATE OR REPLACE PROCEDURE getEmployeeSalaryById(emp_id IN number, sal OUT employees.salary%TYPE) IS
+BEGIN
+  select salary into sal from employees where employee_id = emp_id;
+  --dbms_output.put_line('Employee '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name||' '||employee1.salary);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE callSalaryProcedure IS
+  sal employees.salary%TYPE;
+BEGIN
+  getEmployeeSalaryById(&enter_employee_id, sal);
+  dbms_output.put_line('Employee Salary Rs: '||sal);
+END;
+/
+
+EXEC callSalaryProcedure;
+
+********************************************************
+
+=> Procedure printing single result set
+
+CREATE OR REPLACE PROCEDURE getEmployees(minimum_salary number) IS
+  cursor1 SYS_REFCURSOR;
+  employee1 employees%ROWTYPE;
+BEGIN
+  OPEN cursor1 for select * from employees where salary = minimum_salary order by employee_id;
+  LOOP
+  FETCH cursor1 into employee1;
+    dbms_output.put_line(employee1.employee_id||' '||employee1.salary);
+    EXIT WHEN cursor1%NOTFOUND;
+  END LOOP;
+  CLOSE cursor1;
+END;
+/
+
+EXEC getEmployees(9000);
+
+
+********************************************************
+
+
+### FUNCTIONS ### -> named sub programs in plsql which can be stored and reused later, should contain return value.
+
+
+CREATE OR REPLACE FUNCTION calculateArea(radius number) RETURN number IS
+  result number;
+  PI constant number := 3.14;
+BEGIN
+  result := PI*radius*radius;
+  return result;
+END;
+/
+
+DECLARE
+ area number;
+BEGIN
+ area := calculateArea(&enter_radius);
+ dbms_output.put_line('Arear of Circle : '||area);
+END;
+/
+
+********************************************************
+
+=> Function with IF condition
+
+CREATE OR REPLACE FUNCTION calculateArea(radius number) RETURN number IS
+  result number;
+  PI constant number := 3.14;
+BEGIN
+  result := PI*radius*radius;
+  return result;
+END;
+/
+
+BEGIN
+ IF calculateArea(&enter_radius) > 50 THEN 
+   dbms_output.put_line('Arear of Circle is greater than 50');
+ ELSE
+   dbms_output.put_line('Arear of Circle is greater than 50');
+ END IF;
+END;
+/
+
+********************************************************
+
+=> Function with SELECT query
+
+CREATE OR REPLACE FUNCTION getSalaryByEmployeeId(emp_id number) RETURN number IS
+  sal employees.salary%TYPE;
+BEGIN
+  select salary into sal from employees where employee_id = emp_id;
+  return sal;
+END;
+/
+
+DECLARE
+ sal employees.salary%TYPE;
+BEGIN
+ select getSalaryByEmployeeId(&enter_employee_id) into sal from dual;
+ dbms_output.put_line('Salary of the Employee is : '||sal);
+END;
+/
+
+********************************************************
+
+=> Function with Named Notation
+
+CREATE OR REPLACE FUNCTION add_num(num1 number, num2 number DEFAULT 0,num3 number) RETURN number IS
+BEGIN
+  dbms_output.put_line('number 1 : '||num1);
+  dbms_output.put_line('number 2 : '||num2);
+  dbms_output.put_line('number 3 : '||num3);
+  return num1+num2+num3;
+END;
+/
+
+DECLARE
+  result_1 number;
+BEGIN
+  result_1 := add_num(num1 => 1, num3 => 3);
+  dbms_output.put_line('Result is : '||result_1);
+END;
+/
+
+********************************************************
+
+
+### PACKAGES ### 
+
+
+=> creating Package Description -> contains only the declaration of the elements. if the description has cursor/procedure, then package body is mandatory.
+                                   else it's optional. they are visible public-outside the package also. if anything which is not defined in specification
+                                   but implemented in the package body, then it becomes private.
+
+CREATE OR REPLACE PACKAGE emp_package1 IS 
+  FUNCTION print_string RETURN varchar2;
+  PROCEDURE getEmployees(emp_id number);
+END emp_package1;
+
+********************************************************
+
+=> creating Package Body -> contains implementation of the elements specified in the package specification.
+
+create or replace PACKAGE BODY emp_package1 IS 
+  FUNCTION print_string RETURN varchar2 IS
+    BEGIN
+      RETURN 'Hello World';
+  END print_string;
+
+  PROCEDURE getEmployees(emp_id number, sal OUT number) IS
+    BEGIN
+      select salary into sal from employees where employee_id = emp_id;
+      --dbms_output.put_line('Employee details : '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name||' '||employee1.salary);
+  END getEmployees;
+END emp_package1;
+/
+
+DECLARE
+  sal employees.salary%TYPE;
+BEGIN
+  dbms_output.put_line(emp_package1.print_string);
+  emp_package1.getEmployees(&enter_employee_id, sal);
+  dbms_output.put_line('salary : '||sal);
+END;
+/
+
+********************************************************
+
+create or replace PACKAGE BODY emp_package1 IS 
+  FUNCTION print_string RETURN varchar2 IS
+    BEGIN
+      RETURN 'Hello World';
+  END print_string;
+
+  PROCEDURE getEmployees(emp_id number) IS
+    employee1 employees%ROWTYPE;
+    BEGIN
+      select * into employee1 from employees where employee_id = emp_id;
+      dbms_output.put_line('Employee details : '||employee1.employee_id||' '||employee1.first_name||' '||employee1.last_name||' '||employee1.salary);
+  END getEmployees;
+END emp_package1;
+/
+
+BEGIN
+  dbms_output.put_line(emp_package1.print_string);
+  emp_package1.getEmployees(&enter_employee_id);
+END;
+/
+
+********************************************************
+
+
+### TRIGGERS ### -> stored programs which are executed/triggered automatically based on the event happens
+
+
+=> Synchronized table backup using TRIGGERS
+
+CREATE OR REPLACE TRIGGER accounts_backup_trigger
+BEFORE INSERT OR UPDATE OR DELETE ON accounts
+FOR EACH ROW
+ENABLE
+BEGIN
+  IF INSERTING THEN
+    insert into accounts_backup values (:NEW.account_number, :NEW.holder_name,:NEW.balance,:NEW.credit_limit,:NEW.account_type,:NEW.eligiblity);
+  ELSIF DELETING THEN
+    delete from accounts_backup where account_number = :OLD.account_number;
+  ELSIF UPDATING THEN
+    update accounts_backup set holder_name = :NEW.holder_name, balance = :NEW.balance, credit_limit = :NEW.credit_limit, account_type = :NEW.account_type, eligiblity = :NEW.eligiblity where account_number = :OLD.account_number;
+  END IF;
+END;
+/
+
+********************************************************
+
+=> DDL trigger with schema auditing
+
+CREATE OR REPLACE TRIGGER hr_audit_trigger
+AFTER DDL ON SCHEMA
+BEGIN
+ INSERT INTO schema_audit VALUES(sysdate, sys_context('USERENV','CURRENT_USER'),ora_dict_obj_type,ora_dict_obj_name,ora_sysevent);
+END;
+/
+
+********************************************************
+
+=> Database Event LOG'ON Trigger 
+
+CREATE OR REPLACE TRIGGER hr_logon_trigger
+AFTER LOGON ON SCHEMA
+BEGIN
+ INSERT INTO hr_event_audit VALUES(ora_sysevent,sysdate, TO_CHAR(sysdate,'HH24;MI:SS'),NULL,NULL);
+ COMMIT;
+END;
+/
+
+********************************************************
+
+=> Database Event LOG'OFF Trigger 
+
+CREATE OR REPLACE TRIGGER hr_logoff_trigger
+BEFORE LOGOFF ON SCHEMA
+BEGIN
+ INSERT INTO hr_event_audit VALUES(ora_sysevent,NULL,NULL,sysdate,TO_CHAR(sysdate,'HH24;MI:SS'));
+ COMMIT;
+END;
+/
+
+********************************************************
+
+=> START-UP Trigger 
+
+CREATE OR REPLACE TRIGGER startup_audit_trigger
+AFTER STARTUP ON DATABASE
+BEGIN
+  INSERT INTO startup_audit VALUES(ora_sysevent,sysdate,TO_CHAR(sysdate,'HH24:MI:SS'));
+END;
+/
+
+********************************************************
+
+=> INSTEAD-OF Trigger for Inserting
+
+CREATE VIEW instead_of_view_1 AS
+SELECT trainer_name, subject_name FROM trainer, subject;
+
+CREATE OR REPLACE TRIGGER insert_view_trigger
+INSTEAD OF INSERT ON instead_of_view_1
+FOR EACH ROW
+BEGIN
+  INSERT INTO trainer(trainer_name) VALUES (:NEW.trainer_name);
+  INSERT INTO subject(subject_name) VALUES (:NEW.subject_name);
+END;
+/
+
+INSERT INTO instead_of_view_1 VALUES('Ramkumar','python');
+
+********************************************************
+
+=> INSTEAD-OF Trigger for Updating
+
+CREATE VIEW instead_of_view_1 AS
+SELECT trainer_name, subject_name FROM trainer, subject;
+
+CREATE OR REPLACE TRIGGER update_view_trigger
+INSTEAD OF UPDATE ON instead_of_view_1
+FOR EACH ROW
+BEGIN
+  UPDATE trainer SET trainer_name = :NEW.trainer_name WHERE trainer_name = :OLD.trainer_name;
+  UPDATE subject SET subject_name = :NEW.subject_name WHERE subject_name = :OLD.subject_name;
+END;
+/
+
+update instead_of_view_1 set trainer_name = 'Gowthamraj' where subject_name = 'java';
+
+********************************************************
+
+=> INSTEAD-OF Trigger for Deleting
+
+CREATE VIEW instead_of_view_1 AS
+SELECT trainer_name, subject_name FROM trainer, subject;
+
+CREATE OR REPLACE TRIGGER delete_view_trigger
+INSTEAD OF DELETE ON instead_of_view_1
+FOR EACH ROW
+BEGIN
+  DELETE FROM trainer WHERE trainer_name = :OLD.trainer_name;
+  DELETE FROM subject WHERE subject_name = :OLD.subject_name;
+END;
+/
+
+DELETE FROM instead_of_view_1 WHERE subject_name = 'java';
+
+********************************************************
+
+
+### EXCEPTION HNADLING ### -> runtime errors which cause abnormal termination of the program flow.
+
+=> user defined exception using EXCEPTION keyword
+
+DECLARE
+ divident number := &divident;
+ divisor number := &divisor;
+ result_1 number;
+ divide_by_zero EXCEPTION;
+BEGIN
+  IF divisor = 0 THEN
+    RAISE divide_by_zero;
+  END IF;
+  result_1 := divident / divisor;
+  dbms_output.put_line(result_1);
+  EXCEPTION
+    WHEN divide_by_zero THEN
+      dbms_output.put_line('Divide By Zero Error araised...');
+END;
+/
+
+********************************************************
+
+=> using PRAGMA EXCEPTION_INIT keyword
+
+ACCEPT age number PROMPT 'what is your age ?';
+
+DECLARE
+ var_age number := &age;
+ not_eleigible_to_vote EXCEPTION;
+ PRAGMA EXCEPTION_INIT(not_eleigible_to_vote, -20008);
+BEGIN
+  IF var_age <18 THEN
+    RAISE_APPLICATION_ERROR(-20008,'Not eligible to Vote !!!');
+  END IF;
+  dbms_output.put_line('Eligible to Vote !!!');
+  EXCEPTION
+    WHEN not_eleigible_to_vote THEN
+      dbms_output.put_line(SQLERRM);
+END;
+/
+
+********************************************************
+
+=> using RAISE_APPLICATION_ERROR procedure to raise exception
+
+ACCEPT age number PROMPT 'what is your age ?';
+
+DECLARE
+ var_age number := &age;
+BEGIN
+  IF var_age <18 THEN
+    RAISE_APPLICATION_ERROR(-20008,'Not eligible to Vote !!!');
+  END IF;
+  dbms_output.put_line('Eligible to Vote !!!');
+  EXCEPTION
+    WHEN others THEN
+      dbms_output.put_line(SQLERRM);
+END;
+/
+
+********************************************************
+
+
+### COLLECTIONS IN PLSQL ### -> single dimensional data structure which stores elements of same data type.
+
+Types : 1) Persistent -> can be stored in database and used later. => (nested table, VARRAYS)
+        2) Non-Persistent -> cannot be stored and used only under that session. => (Associative Arrays)
+
+
+## ASSOCIATIVE ARRAYS ## -> Non-Persistent collection, cannot be reused, available in plsql block for the session.
+                         -> stores data as key-value pairs.
+
+DECLARE 
+ TYPE new_array
+ IS TABLE OF varchar2(100)
+ INDEX BY varchar2(50);
+ 
+ array1 new_array;
+ itr_index varchar2(50);
+BEGIN
+ array1('name') := 'Gowthamraj';
+ array1('mobile') := '9698382306';
+ array1('email') := 'gowtham@gmai.com';
+ array1('degree') := 'BE ECE';
+ 
+ itr_index := array1.FIRST;
+ dbms_output.put_line('My name, mobile, email, degree are as follows : ');
+ WHILE itr_index IS NOT NULL LOOP 
+   dbms_output.put_line(array1(itr_index));
+   itr_index := array1.NEXT(itr_index);
+ END LOOP;
+END;
+/
+
+********************************************************
+
+## NESTED TABLE ## -> Persistent collection, no limit on rows and hence they are unbounded collections, can be used in tables, records and other objects.
+                      They can hold any number of elements as unordered collections.
+
+=> simple Nested table
+
+DECLARE
+  TYPE new_table IS TABLE OF number;
+  table_1 new_table := new_table(1,2,3,4,5,6,7,8,9,10);
+BEGIN
+  FOR itr IN 1..10 LOOP
+    dbms_output.put_line(table_1(itr));
+  END LOOP;
+END;
+/
+
+*******************************************************
+
+=> -> inorder to make a table columns as nested table type, we have to mention two things
+      1) The name of the column you want to use as nested table column
+      2) The storage table for your nested table type column.
+
+      nested tables are useful to establish some relationships like 1-*, etc...
+
+
+CREATE OR REPLACE TYPE nested_table_1 IS TABLE OF varchar2(40);
+/
+
+create table classes(
+  class_id number(5),
+  class_name varchar2(30),
+  class_days nested_table_1
+)NESTED TABLE class_days STORE AS nested_tab_space;
+/
+
+insert into classes values(1,'class A',nested_table_1('mon','tue','wed'));
+select * from classes;
+
+*******************************************************
+
+=> Inserting into Nested Table from CURSOR
+
+DECLARE 
+ CURSOR cursor1 IS
+ select employee_id from employees where employee_id IN(100,101,102,103,104,105);
+ 
+ TYPE new_table
+ IS TABLE OF employees.employee_id%TYPE;
+ 
+ table_1 new_table := new_table();
+BEGIN
+ FOR employee1 IN cursor1 LOOP
+   table_1.EXTEND;
+   table_1(table_1.LAST) := employee1.employee_id;
+ END LOOP;
+ 
+ dbms_output.put_line('Employee IDs are as follows');
+ FOR itr_index IN table_1.FIRST..table_1.LAST LOOP
+   dbms_output.put_line(table_1(itr_index));
+ END LOOP;
+END;
+/
+
+*******************************************************
+
+=> nested table using user defined data type
+
+CREATE OR REPLACE TYPE obj_type AS OBJECT(
+  obj_id number(5),
+  obj_name varchar2(30)
+);
+/
+
+CREATE OR REPLACE TYPE user_nested_table IS TABLE OF obj_type;
+/
+
+create table usernested_table_demo (
+  new_column  user_nested_table
+) NESTED TABLE new_column STORE AS store_table_1;
+/
+
+insert into usernested_table_demo values(user_nested_table(obj_type(1,'record 1')));
+select * from usernested_table_demo;
+
+*******************************************************
+
+## VARRAY (Variable Arrays) ## -> Persistent collection, has bound on rows(fixed size)
+
+=> Normal VArray (VARRAY as a member of Plsql block)
+
+DECLARE 
+ TYPE new_varray IS VARRAY(5) OF varchar2(20) NOT NULL;
+ array_1 new_varray := new_varray('Gowtham','Raj','Ram','Kumar','Raju');
+BEGIN
+ dbms_output.put_line('Total Number of Elements Before Trimming : '||array_1.COUNT);
+ array_1.TRIM;
+ dbms_output.put_line('Total Number of Elements After Trimming last 1 element : '||array_1.COUNT);
+ array_1.TRIM(2);
+ dbms_output.put_line('Total Number of Elements After Trimming last 2 elements: '||array_1.COUNT);
+END;
+/
+
+*******************************************************
+
+=> Normal VARRAY (VARRAY as a database object)
+
+CREATE OR REPLACE TYPE new_varray IS VARRAY(5) OF number(5);
+/
+
+create table calender_demo (
+ day_name varchar2(30),
+ day_date new_varray
+);
+/
+
+insert into calender_demo values('mon',new_varray(1,2,3,4,5));
+
+select tab_1.day_name, vary_1.column_value from calender_demo tab_1, TABLE (tab_1.day_date) vary_1;
+
+********************************************************
+
+=> Modifying the Size limit
+
+ALTER TYPE array_1 MODIFY LIMIT 10 [INVALIDATE -> invalidate all dependent objects| CASCADE -> changes in dependent tables also]
+
+*******************************************************
+
+=> VARRAY of Records
+
+DECLARE 
+ TYPE record1 IS RECORD (
+   emp_id employees.employee_id%TYPE,
+   fname employees.first_name%TYPE,
+   lname employees.last_name%TYPE,
+   sal employees.salary%TYPE
+ );
+
+ TYPE new_varray IS VARRAY(5)
+ OF record1;
+ array_1 new_varray := new_varray();
+BEGIN
+ array_1.EXTEND;
+ select employee_id, first_name, last_name, salary into 
+ array_1(array_1.LAST).emp_id, array_1(array_1.LAST).fname, array_1(array_1.LAST).lname, array_1(array_1.LAST).sal
+ from employees where employee_id  = 100;
+ 
+ array_1.EXTEND;
+ select employee_id, first_name, last_name, salary into 
+ array_1(array_1.LAST).emp_id, array_1(array_1.LAST).fname, array_1(array_1.LAST).lname, array_1(array_1.LAST).sal
+ from employees where employee_id  = 101;
+ 
+ array_1.EXTEND;
+ select employee_id, first_name, last_name, salary into 
+ array_1(array_1.LAST).emp_id, array_1(array_1.LAST).fname, array_1(array_1.LAST).lname, array_1(array_1.LAST).sal
+ from employees where employee_id  = 102;
+ dbms_output.put_line('Total Number of Elements : '||array_1.COUNT);
+ FOR itr_counter IN 1..array_1.COUNT LOOP
+ dbms_output.put_line('Value : '||array_1(itr_counter).emp_id||' '||array_1(itr_counter).fname||' '||array_1(itr_counter).lname||' '||array_1(itr_counter).sal);
+ END LOOP;
+END;
+/
+
+********************************************************
+
+=> Fetch cursor elements into VArray 
+
+DECLARE 
+ TYPE record1 IS RECORD (
+   emp_id employees.employee_id%TYPE,
+   fname employees.first_name%TYPE,
+   lname employees.last_name%TYPE,
+   sal employees.salary%TYPE
+ );
+
+ TYPE new_varray IS VARRAY(5)
+ OF record1;
+ array_1 new_varray := new_varray();
+ 
+ CURSOR cursor1 IS
+ select employee_id, first_name, last_name, salary from employees where employee_id IN (100,101,102,103,104);
+BEGIN
+ FOR employee1 IN cursor1 LOOP
+   array_1.EXTEND;
+   array_1(array_1.LAST).emp_id := employee1.employee_id;
+   array_1(array_1.LAST).fname := employee1.first_name;
+   array_1(array_1.LAST).lname := employee1.last_name;
+   array_1(array_1.LAST).sal := employee1.salary;
+ END LOOP;
+ dbms_output.put_line('Total Number of Elements : '||array_1.COUNT);
+ FOR itr_counter IN array_1.FIRST..array_1.LAST LOOP
+   dbms_output.put_line('Value : '||array_1(itr_counter).emp_id||' '||array_1(itr_counter).fname||' '||array_1(itr_counter).lname||' '||array_1(itr_counter).sal);
+ END LOOP;
+END;
+/
+
+********************************************************
+
+### DYNAMIC SQL ###
+
+=> BULK COLLECT with SELECT INTO statement
+
+DECLARE
+  TYPE new_table IS TABLE OF varchar2(20);
+  table_1 new_table;
+BEGIN
+  SELECT first_name BULK COLLECT INTO table_1 FROM employees;
+  
+  FOR idx IN 1..table_1.COUNT LOOP
+    dbms_output.put_line(idx||' - '||table_1(idx));
+  END LOOP;
+END;
+/
+
+********************************************************
+
+=> BULK COLLECT clause with FETCH-INTO statement
+
+DECLARE
+  CURSOR cursor_1 IS
+  SELECT first_name FROM employees;
+  
+  TYPE new_table IS TABLE OF varchar2(20);
+  table_1 new_table;
+BEGIN
+  OPEN cursor_1;
+  LOOP
+    FETCH cursor_1 BULK COLLECT INTO table_1;
+    EXIT WHEN table_1.COUNT = 0;
+    FOR idx IN table_1.FIRST..table_1.LAST LOOP
+      dbms_output.put_line(idx||' - '||table_1(idx));
+    END LOOP;
+  END LOOP;
+  CLOSE cursor_1;
+END;
+/
+
+********************************************************
+
+=> BULK COLLECT with LIMIT clause
+
+DECLARE
+  CURSOR cursor_1 IS
+  SELECT first_name FROM employees;
+  
+  TYPE new_table IS TABLE OF varchar2(20);
+  table_1 new_table;
+BEGIN
+  OPEN cursor_1;
+  FETCH cursor_1 BULK COLLECT INTO table_1 LIMIT 10;
+  CLOSE cursor_1;
+  FOR idx IN table_1.FIRST..table_1.LAST LOOP
+    dbms_output.put_line(idx||' - '||table_1(idx));
+  END LOOP;
+END;
+/
+
+********************************************************
+
+=> FORALL statement with LOWER & UPPER bound
+
+DECLARE  
+  TYPE new_array IS TABLE OF number INDEX BY PLS_INTEGER;
+  array_1 new_array;
+  val number := &enter_value;
+  total_count number;
+BEGIN
+  FOR itr IN 1..10 LOOP
+    array_1(itr) := val * itr; 
+  END LOOP;
+  
+  FORALL idx IN 1..10
+    INSERT INTO multiplication VALUES(array_1(idx));
+  
+  SELECT count(*) INTO total_count FROM multiplication;
+  dbms_output.put_line('Total values stored : '||total_count);
+END;
+/
+
+********************************************************
+
+=> FORALL statement with INDICES OF clause
+
+DECLARE  
+  TYPE new_table IS TABLE OF number;
+  table_1 new_table := new_table(2,4,6,8,10,12,14,16,18,20);
+  total_count number;
+BEGIN 
+  table_1.DELETE(3,6);
+  FORALL idx IN INDICES OF table_1
+    INSERT INTO multiplication VALUES(table_1(idx));
+  
+  SELECT count(*) INTO total_count FROM multiplication;
+  dbms_output.put_line('Total values stored : '||total_count);
+END;
+/
+
+********************************************************
+
+=> FORALL statement with VALUES OF bound clause
+
+DECLARE  
+  TYPE new_table IS TABLE OF number;
+  table_1 new_table := new_table(4,8,12,16,20,24,28,32,36,40);
+  
+  TYPE new_array IS TABLE OF PLS_INTEGER INDEX BY PLS_INTEGER;
+  index_col new_array;
+  total_count number;
+BEGIN 
+  index_col(1) := 3;
+  index_col(2) := 7;
+  index_col(12) := 8;
+  index_col(28) := 10;
+  FORALL idx IN VALUES OF index_col
+    INSERT INTO multiplication VALUES(table_1(idx));
+  
+  SELECT count(*) INTO total_count FROM multiplication;
+  dbms_output.put_line('Total values stored : '||total_count);
+END;
+/
+
+********************************************************
+=> using EXECUTE IMMEDIATE
+
+DECLARE
+  sql_query varchar2(150);
+  total_count number(5);
+BEGIN
+  sql_query := 'select count(*) from employees';
+  EXECUTE IMMEDIATE sql_query INTO total_count;
+  dbms_output.put_line('Total Count of employees is : '||total_count);
+END;
+/
+
+********************************************************
+
+=> Executing DDL statements using EXECUTE IMMEDIATE (method 1)
+
+DECLARE
+  sql_query varchar2(150);
+BEGIN
+  sql_query := 'CREATE TABLE native_sql_practice (
+                  id number(3),
+                  name varchar2(50)
+                )';
+  EXECUTE IMMEDIATE sql_query;
+END;
+/
+
+********************************************************
+
+=> Executing DDL statements using EXECUTE IMMEDIATE (method 2)
+
+DECLARE
+  sql_query varchar2(150);
+BEGIN
+  sql_query := 'CREATE TABLE native_sql_practice ('||
+                  'id number(3),'||
+                  'name varchar2(50)'||
+                ')';
+  EXECUTE IMMEDIATE sql_query;
+END;
+/
+
+********************************************************
+
+=> ALTER TABLE using EXECUTE IMMEDIATE
+
+DECLARE
+  sql_query varchar2(150);
+BEGIN
+  sql_query := 'ALTER TABLE native_sql_practice ADD curr_date DATE';
+  EXECUTE IMMEDIATE sql_query;
+END;
+/
+
+********************************************************
+
+=> DROP TABLE using EXECUTE IMMEDIATE
+
+DECLARE
+  sql_query varchar2(150);
+BEGIN
+  sql_query := 'DROP TABLE native_sql_practice';
+  EXECUTE IMMEDIATE sql_query;
+END;
+/
+
+********************************************************
+
+=> using BIND VARIABLES to insert values into the table with 'USING' clause
+
+DECLARE
+  sql_query varchar2(150);
+BEGIN
+  sql_query := 'INSERT INTO native_sql_practice(name) VALUES (:name)';
+  EXECUTE IMMEDIATE sql_query USING 'Gowtham';
+END;
+/
+
+********************************************************
+
+=> using multiple BIND VARIABLES to insert values into the table with 'USING' clause
+
+DECLARE
+  sql_query varchar2(150);
+BEGIN
+  sql_query := 'UPDATE native_sql_practice SET name = :new_name WHERE name = :old_name';
+  EXECUTE IMMEDIATE sql_query USING 'Gowthamraj','Gowtham';
+END;
+/
+
+********************************************************
+
+=> using BULK COLLECT with EXECUTE IMMEDIATE
+
+DECLARE
+  TYPE table_1 IS TABLE OF VARCHAR2(60);
+  employee_1 table_1;
+  sql_query varchar2(150);
+BEGIN
+  sql_query := 'SELECT first_name FROM employees';
+  EXECUTE IMMEDIATE sql_query BULK COLLECT INTO employee_1;
+  FOR idx IN 1..employee_1.COUNT LOOP
+    dbms_output.put_line(idx||' - '||employee_1(idx));
+  END LOOP;
+END;
+/
+
+********************************************************
+
+=> Dynamic PLSQL block
+
+DECLARE
+  plsql_block varchar2(300);
+BEGIN
+  plsql_block := 'DECLARE
+                    curr_user varchar2(10);
+                  BEGIN
+                    select user into curr_user from dual;
+                    dbms_output.put_line(''current user logged in is : ''||curr_user);
+                  END;';
+  EXECUTE IMMEDIATE plsql_block;
+END;
+/
+
+********************************************************
+
+### AUTONOMOUT TRANSACTIONS ###
+
+DECLARE
+   sal   NUMBER;
+   PROCEDURE nested_block IS PRAGMA autonomous_transaction;
+   BEGIN
+     UPDATE employees SET salary = salary + 15000 WHERE employee_id = 102;
+     COMMIT;
+   END;
+BEGIN
+   SELECT salary INTO sal FROM employees WHERE employee_id = 101;
+   dbms_output.put_line('Before Salary of 101 is '|| sal);
+   SELECT salary INTO sal FROM employees WHERE employee_id = 102;
+   dbms_output.put_line('Before Salary of 102 is '|| sal);    
+   UPDATE employees SET salary = salary + 5000 WHERE employee_id = 101;
+   nested_block;
+   ROLLBACK;
+
+   SELECT salary INTO  sal FROM employees WHERE employee_id = 101;
+   dbms_output.put_line('After Salary of 101 is '|| sal);
+   SELECT salary INTO sal FROM employees WHERE employee_id = 102;
+   dbms_output.put_line('After Salary of 102 is '|| sal);
+END;
+
+********************************************************
+
+
+********************************************************
+
+
+********************************************************
