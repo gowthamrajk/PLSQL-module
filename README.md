@@ -6,7 +6,15 @@ In This module, I will be adding some PL/SQL contents and its related source mat
 
 <br>
 
-**For more queries, reach me through gowthamraj692@gmail.com or whatsapp @ 9698382306**
+**For more queries, reach me through gowthamraj692@gmail.com or whatsapp @ 9698382306** 🌐
+
+## Learning Resources 📺
+
+- [Best PlSql tutorials](https://www.youtube.com/playlist?list=PLL_LQvNX4xKyiExzq9GKwORoH6nvaRnOQ)
+- [PLSQL Tutorials for beginners](https://www.youtube.com/watch?v=9dNFCgpAGfI)
+- [Oracle PlSQL Tutorials](https://www.youtube.com/playlist?list=PLWPirh4EWFpHj0kKqqYudPNOrGEa0fFIr)
+- [PLSQL sessions by Nariesh I Technologies](https://www.youtube.com/playlist?list=PLVlQHNRLflP-B-e7daJkgKPS_vmya5mY6)
+- [Oracle 11g PLSQL tutorials](https://www.youtube.com/playlist?list=PL6nhaOw5ARFMEzAMAwKSbdBTdwfKHg6q5)
 
 <div align="center">
 
